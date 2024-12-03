@@ -19,7 +19,7 @@ const PORT =process.env.PORT || 3000
 
 
 server.listen(PORT,()=>{
-    console.log("Server started running at http://localhost:3000/");
+    console.log(`Server started running at http://localhost:${PORT}/`);
 })
 
 server.get("/",(req,res)=>{

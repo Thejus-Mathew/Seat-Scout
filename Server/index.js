@@ -12,7 +12,8 @@ const server = express()
 server.use(cors())
 server.use(express.json())
 server.use(router)
-server.use('/uploads',express.static('./uploads'))
+// server.use('/uploads',express.static('./uploads'))
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 
 const PORT =process.env.PORT || 3000

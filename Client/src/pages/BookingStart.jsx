@@ -3,9 +3,11 @@ import Header from '../components/Header'
 import movie22 from '../images/movies/movie22.avif'
 import movie2 from '../images/movies/movie2.avif'
 import Footer from '../components/Footer'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Button, Modal } from 'react-bootstrap'
 import screen from '../images/screen.png'
+import { toast } from 'react-toastify'
+import { getAMovieAPI } from '../Services/allAPI'
 
 function BookingStart() {
     const [isMobile] = useState(window.innerWidth<1000?true:false)
@@ -41,6 +43,29 @@ function BookingStart() {
     })
 
     const [choseDate,setChoseDate]=useState(1)
+
+    const [movie,setMovie]=useState({})
+    const {movieId} = useParams()
+
+    const getMovie = async () => {
+        try{
+          const result = await getAMovieAPI(movieId)
+          if(result.status==200){
+            setMovie(result.data)
+          }else{
+            toast.warn("Failed to fetch movie data")
+          }
+        }catch(err){
+          toast.warn("Failed to fetch movie data")
+          console.log("Failed to fetch movie data",err);
+        }
+      }
+  
+      useEffect(()=>{
+        getMovie()
+      },[])
+  
+      console.log(movie);
 
     const navigate = useNavigate()
 
@@ -88,27 +113,33 @@ function BookingStart() {
             setSeatCount(seatCount-1)
         }
     }
+
+    useEffect(()=>{
+        if(!sessionStorage.getItem("token")){
+            navigate('/')
+        }
+    },[])
         
 
   return (
     <div>
       <Header/>
-      <div className="bgbg" style={{backgroundImage:`url(${movie22})`,height:`${isMobile?"200px":"500px"}`}}>
+      <div className="bgbg" style={{backgroundImage:`url(${movie?.cover})`,height:`${isMobile?"200px":"500px"}`}}>
         <div className={`bg d-flex ${isMobile?"py-2":"p-5 py-4"}`}>
-            <img src={movie2} className={`${isMobile?"ms-2":"ms-5 me-5"}`} alt="" />
+            <img src={movie?.poster} className={`${isMobile?"ms-2":"ms-5 me-5"}`} alt="" />
             <div className="d-flex flex-column justify-content-center ms-4 text-light gap-3" style={{height:'100%'}}>
-                <h1>A.R.M</h1>
+                <h1>{movie?.name}</h1>
                 {
                     isMobile?<>
                         <span>
-                        <button className='btn btn-sm border btn-light me-2'>UA</button>
-                        <button className='btn btn-sm border btn-light'>2D,3D</button>
+                        <button className='btn btn-sm border btn-light me-2'>{movie?.rated}</button>
+                        <button className='btn btn-sm border btn-light'>{movie?.format && movie?.format.join(", ")}</button>
                         </span>
                     </>:
                     <div className='d-flex flex-column gap-3'>
-                        <div><button className='btn btn-lg btn-secondary fs-5'><i className="fa-solid fa-star"></i> 8.8/10 (66.6K Votes)</button></div>
-                        <span><button className='btn btn-sm btn-light'>2D,3D</button><button className='btn btn-sm btn-light ms-3'>Malayalam, Hindi, Tamil, Kannada, Telugu</button></span>
-                        <p>2h 23m <i className="fa-solid fa-circle fa-2xs ms-3"></i> Action, Adventure, Drama, Period <i className="fa-solid fa-circle fa-2xs ms-3"></i> UA <i className="fa-solid fa-circle fa-2xs ms-3"></i> 12 Sep, 2024</p>
+                        <div><button className='btn btn-lg btn-secondary fs-5'><i className="fa-solid fa-star"></i> {movie?.rating}</button></div>
+                        <span><button className='btn btn-sm btn-light'>{movie?.format && movie?.format.join(", ")}</button><button className='btn btn-sm btn-light ms-3'>{movie?.languages && movie?.languages.join(", ")}</button></span>
+                        <p>2h 23m <i className="fa-solid fa-circle fa-2xs ms-3"></i> {movie?.type && movie?.type.join(", ")} <i className="fa-solid fa-circle fa-2xs ms-3"></i> {movie?.rated} <i className="fa-solid fa-circle fa-2xs ms-3"></i> 12 Sep, 2024</p>
                     </div>
                 }
             </div>
@@ -142,14 +173,19 @@ function BookingStart() {
             <div className="col-4 d-flex align-items-center">
                 <select  className='form-control me-3' onChange={(e)=>setLanguage(e.target.value)} value={language}>
                     <option value={""} disabled>Language</option>
-                    <option value="Malayalam">Malayalam</option>
-                    <option value="Hindi">Hindi</option>
-                    <option value="Tamil">Tamil</option>
+                    {
+                        movie?.languages && movie.languages.map((item,index)=>(
+                            <option key={index} value={item}>{item}</option>
+                        ))
+                    }
                 </select>
                 <select  className='form-control'onChange={(e)=>setFormat(e.target.value)} value={format}>
                     <option value={""} disabled>Format</option>
-                    <option value="2D">2D</option>
-                    <option value="3D">3D</option>
+                    {
+                        movie?.format && movie.format.map((item,index)=>(
+                            <option key={index} value={item}>{item}</option>
+                        ))
+                    }
                 </select>
             </div>
         </div>
@@ -242,14 +278,19 @@ function BookingStart() {
             <div className="d-flex flex-column gap-3">
                 <select className='form-control me-3' onChange={(e)=>setLanguage(e.target.value)} value={language}>
                     <option value={""} disabled>Language</option>
-                    <option value="Malayalam">Malayalam</option>
-                    <option value="Hindi">Hindi</option>
-                    <option value="Tamil">Tamil</option>
+                    {
+                        movie?.languages && movie.languages.map((item,index)=>(
+                            <option key={index} value={item}>{item}</option>
+                        ))
+                    }
                 </select>
                 <select  className='form-control' onChange={(e)=>setFormat(e.target.value)} value={format}>
                     <option value={""} disabled>Format</option>
-                    <option value="2D">2D</option>
-                    <option value="3D">3D</option>
+                    {
+                        movie?.format && movie.format.map((item,index)=>(
+                            <option key={index} value={item}>{item}</option>
+                        ))
+                    }
                 </select>
             </div>
         </Modal.Body>

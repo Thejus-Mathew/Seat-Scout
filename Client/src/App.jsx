@@ -29,10 +29,10 @@ function App() {
       <Route path='/profile'element={<Profile/>}/>
       <Route path='/movies'element={<AllMovies/>}/>
       <Route path='/theatres'element={<AllTheatres/>}/>
-      <Route path='/movie'element={<Movie/>}/>
+      <Route path='/movie/:movieId'element={<Movie/>}/>
       <Route path='/theatre'element={<Theatre/>}/>
       <Route path='/bookings'element={<Bookings/>}/>
-      <Route path='/bookingstart'element={<BookingStart/>}/>
+      <Route path='/bookingstart/:movieId'element={<BookingStart/>}/>
       <Route path='/payment'element={<Payment/>}/>
       <Route path='/admin'element={admin?<AdminDashboard/>:<AdminAuth/>}/>
       <Route path='/adminprofile'element={admin?<AdminProfile/>:<AdminAuth/>}/>

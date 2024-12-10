@@ -40,7 +40,7 @@ exports.getAMovie = async (req,res)=> {
         const result = await movies.findOne({_id:movieId})
         res.status(200).json(result)
     }catch(err){
-        res.status(401).json(err)
+        res.status(500).json(err)
     }
 }
 
@@ -50,7 +50,7 @@ exports.getAllMovies = async(req,res)=>{
         const result = await movies.find()
         res.status(200).json(result)
     }catch(err){
-        res.status(401).json(err)
+        res.status(500).json(err)
     }
 }
 
@@ -67,7 +67,7 @@ exports.addToTheatreList = async(req,res)=>{
         const result = await theatreList.findByIdAndUpdate({_id:id},updatedData,{new:true})        
         res.status(200).json("Successfull")
     }catch(err){
-        res.status(401).json(err)
+        res.status(500).json(err)
     }
 }
 // remove from thetreLis
@@ -82,6 +82,6 @@ exports.removeFromTheatreList = async(req,res)=>{
         const result = await theatreList.findByIdAndUpdate({_id:id},updatedData,{new:true})        
         res.status(200).json("Successfull")
     }catch(err){
-        res.status(401).json(err)
+        res.status(500).json(err)
     }
 }

@@ -25,7 +25,7 @@ router.post('/addMovie',jwtMiddleware,postMovie)
 router.post('/adminMovie',jwtMiddleware,getMoviesForAdmin)
 
 // get a movie
-router.get('/getAMovie/:movieId',jwtMiddleware,getAMovie)
+router.get('/getAMovie/:movieId',getAMovie)
 
 // post booking
 router.post('/booking/',jwtMiddleware,postBookings)
@@ -34,7 +34,7 @@ router.post('/booking/',jwtMiddleware,postBookings)
 router.get('/booking/:adminId/:movieId/:timeId',jwtMiddleware,getBookings)
 
 // get all movies
-router.get('/getAllMovies',jwtMiddleware,getAllMovies)
+router.get('/getAllMovies',getAllMovies)
 
 // add to theatreList
 router.put('/addToTheatreList/:movieId',jwtMiddleware,addToTheatreList)

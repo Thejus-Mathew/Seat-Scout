@@ -86,58 +86,8 @@ function AdminMovie() {
         poster:"",
         cover:"",
       })
-      const[lang,setLang]=useState("")
-      const[form,setForm]=useState("")
-      const[cas,setCast]=useState("")
-      const[cre,setCrew]=useState("")
-      const[genre,setGenre]=useState("")
       const navigate = useNavigate()
-  
-  
-  
-      const addLang = () => {
-        if(lang){
-          setMovie({...movie,languages:[...movie.languages,lang]})
-          setLang("")
-        }
-      }
-  
-      const addForm = () => {
-        if(form){
-          setMovie({...movie,format:[...movie.format,form]})
-          setForm("")
-        }
-      }
-  
-      const addCast = () => {
-        if(cas){
-          setMovie({...movie,cast:[...movie.cast,cas]})
-          setCast("")
-        }
-      }
-  
-      const addCrew = () => {
-        if(cre){
-          setMovie({...movie,crew:[...movie.crew,cre]})
-          setCrew("")
-        }
-      }
-  
-      const addGenre = () => {
-        if(genre){
-          setMovie({...movie,type:[...movie.type,genre]})
-          setGenre("")
-        }
-      }
-  
-      const handleDel = (value,key)=>{
-        console.log(movie[key])
-        let index = movie[key].indexOf(value)
-        let array = [...movie[key]]
-        index != -1?array.splice(index,1):null
-        console.log(index);
-        setMovie({...movie,[key]:array})
-      }
+
 
       const[selectedWeak,setSelectedWeak]=useState(1)
       const[timeStamp,setTimeStamp]=useState(admin?.movies[admin.movies.findIndex((item)=>item.movieId==movieId)]?.timeStamp)

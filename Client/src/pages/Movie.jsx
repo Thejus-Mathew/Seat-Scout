@@ -35,7 +35,7 @@ function Movie() {
       if(sessionStorage.getItem("token")){
         navigate(`/bookingstart/${movieId}`)
       }else{
-        toast.info("Signin to Book Tickets")
+        toast.info("Sign in to Book Tickets")
       }
     }
     

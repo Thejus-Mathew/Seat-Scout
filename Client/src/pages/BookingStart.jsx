@@ -6,41 +6,47 @@ import { Button, Modal } from 'react-bootstrap'
 import screen from '../images/screen.png'
 import { toast } from 'react-toastify'
 import { getAMovieAPI, getTheatresListApi } from '../Services/allAPI'
+import UserSeat from '../components/UserSeat'
 
 function BookingStart() {
     const [isMobile] = useState(window.innerWidth<1000?true:false)
     const date1 = new Date()
+    const weekNum = date1.getDay()
     const date2 = new Date(Number(date1)+(1000*60*60*24))
     const date3 = new Date(Number(date1)+(1000*60*60*24*2))
     const date4 = new Date(Number(date1)+(1000*60*60*24*3))
-
+    
     
     const[day1] = useState({
         time:Number(date1),
         week:date1.toString().slice(0,3),
         day:date1.toString().slice(4,7),
         month:date1.toString().slice(8,10),
+        year:date1.toString().slice(11,15),
     })
     const[day2] = useState({
         time:Number(date2),
         week:date2.toString().slice(0,3),
         day:date2.toString().slice(4,7),
         month:date2.toString().slice(8,10),
+        year:date1.toString().slice(11,15),
     })
     const[day3] = useState({
         time:Number(date3),
         week:date3.toString().slice(0,3),
         day:date3.toString().slice(4,7),
         month:date3.toString().slice(8,10),
+        year:date1.toString().slice(11,15),
     })
     const[day4] = useState({
         time:Number(date4),
         week:date4.toString().slice(0,3),
         day:date4.toString().slice(4,7),
         month:date4.toString().slice(8,10),
+        year:date1.toString().slice(11,15),
     })
 
-    const [choseDate,setChoseDate]=useState(1)
+    const [choseDate,setChoseDate]=useState(weekNum)
 
     const [movie,setMovie]=useState({})
     const {movieId} = useParams()
@@ -112,12 +118,6 @@ function BookingStart() {
         }
     }
 
-    // useEffect(()=>{
-    //     if(!language || !format){
-    //         setShowM(true)
-    //     }
-    // },[language,format])
-
 
     const selectSeat = (item,item1)=>{
 
@@ -139,6 +139,23 @@ function BookingStart() {
             navigate('/')
         }
     },[])
+
+    const[timeId,setTimeId]=useState(day1)
+
+    useEffect(()=>{
+    if(choseDate == weekNum){
+        setTimeId(day1)
+    }
+    else if(choseDate == weekNum+1){
+        setTimeId(day2)
+    }
+    else if(choseDate == weekNum+2){
+        setTimeId(day3)
+    }
+    else if(choseDate == weekNum+3){
+        setTimeId(day4)
+    }
+    },[choseDate])
         
 
   return (
@@ -168,22 +185,22 @@ function BookingStart() {
       <div className="container my-5 card shadow-5 border border-3">
         <div className="row border py-3">
             <div className="col-4 gap-2 d-flex position-relative">
-                <button className={`btn rounded-5 px-3 ${choseDate==1?"btn-danger":""}`} onClick={()=>setChoseDate(1)}>
+                <button className={`btn rounded-5 px-3 ${choseDate==weekNum?"btn-danger":""}`} onClick={()=>setChoseDate(weekNum)}>
                     <div>{day1.week}</div>
                     <div>{day1.day}</div>
                     <div>{day1.month}</div>
                 </button>
-                <button className={`btn rounded-5 px-3 ${choseDate==2?"btn-danger":""}`} onClick={()=>setChoseDate(2)}>
+                <button className={`btn rounded-5 px-3 ${choseDate==(weekNum+1>7?weekNum+1-7:weekNum+1)?"btn-danger":""}`} onClick={()=>setChoseDate(weekNum+1>7?weekNum+1-7:weekNum+1)}>
                     <div>{day2.week}</div>
                     <div>{day2.day}</div>
                     <div>{day2.month}</div>
                 </button>
-                <button className={`btn rounded-5 px-3 ${choseDate==3?"btn-danger":""}`} onClick={()=>setChoseDate(3)}>
+                <button className={`btn rounded-5 px-3 ${choseDate==(weekNum+2>7?weekNum+2-7:weekNum+2)?"btn-danger":""}`} onClick={()=>setChoseDate(weekNum+2>7?weekNum+2-7:weekNum+2)}>
                     <div>{day3.week}</div>
                     <div>{day3.day}</div>
                     <div>{day3.month}</div>
                 </button>
-                <button className={`btn rounded-5 px-3 ${choseDate==4?"btn-danger":""}`} onClick={()=>setChoseDate(4)}>
+                <button className={`btn rounded-5 px-3 ${choseDate==(weekNum+3>7?weekNum+3-7:weekNum+3)?"btn-danger":""}`} onClick={()=>setChoseDate(weekNum+3>7?weekNum+3-7:weekNum+3)}>
                     <div>{day4.week}</div>
                     <div>{day4.day}</div>
                     <div>{day4.month}</div>
@@ -217,99 +234,18 @@ function BookingStart() {
                         <p>{theatreItem?.theatreName}, {theatreItem?.city}</p>
                     </div>
                     <div className="col-8 d-flex gap-1">
-                        <button className='btn text-success' onClick={()=>setShow(true)}>
-                            <div>12:00pm</div>
-                            <div>₹ 150</div>
-                        </button>
-                        <button className='btn text-success' onClick={()=>setShow(true)}>
-                            <div>06:00pm</div>
-                            <div>₹ 150</div>
-                        </button>
-                        <button className='btn text-success' onClick={()=>setShow(true)}>
-                            <div>09:00pm</div>
-                            <div>₹ 150</div>
-                        </button>
+                        {
+                            theatreItem.movies.find(movieItem=>movieItem.movieId==movieId)
+                            .timeStamp[choseDate]
+                            .map((item,index)=>(
+                                <UserSeat key={index} time={item.time} price={item.price} seat={theatreItem.seats} movieId={movieId} theatreId={theatreItem._id} timeId={timeId}/>
+                            ))
+                        }
                     </div>
                 </div>
             ))
             :<></>
         }
-        <div className="row mt-3 shadow py-3">
-            <div className="col-4">
-                <p>Cinepolis: Centre Square Mall, Kochi</p>
-            </div>
-            <div className="col-8 d-flex gap-1">
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>12:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>06:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>09:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-            </div>
-        </div>
-        <div className="row mt-3 shadow py-3">
-            <div className="col-4">
-                <p>Aashirvad Cineplexx: Perumbavoor</p>
-            </div>
-            <div className="col-8 d-flex gap-1">
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>12:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>06:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>09:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-            </div>
-        </div>
-        <div className="row mt-3 shadow py-3">
-            <div className="col-4">
-                <p>Casino Talkies A/C 2K 3D DOLBY SURROUND 7.1 Aluva</p>
-            </div>
-            <div className="col-8 d-flex gap-1">
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>12:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>06:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>09:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-            </div>
-        </div>
-        <div className="row mt-3 shadow py-3">
-            <div className="col-4">
-                <p>Central Talkies 2K 3D Dolby Atmos: Thrippunithura</p>
-            </div>
-            <div className="col-8 d-flex gap-1">
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>12:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>06:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-                <button className='btn text-success' onClick={()=>setShow(true)}>
-                    <div>09:00pm</div>
-                    <div>₹ 150</div>
-                </button>
-            </div>
-        </div>
       </div>
       <Footer/>
 

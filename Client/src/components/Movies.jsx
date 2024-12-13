@@ -39,7 +39,7 @@ function Movies() {
             allMovies.length>0?
             allMovies.slice(0,5)
             .map((item,index)=>(
-              <div key={index} className="col d-flex flex-column border rounded-5 m-1 shadow" onClick={()=>navigate(`/movie/${item?._id}`)} style={{cursor:"pointer",minWidth:isMobile?"150px":"250px"}}>
+              <div key={index} className="col d-flex flex-column border rounded-5 m-1 shadow" onClick={()=>navigate(`/movie/${item?._id}`)} style={{cursor:"pointer",minWidth:isMobile?"150px":"300px",maxWidth:isMobile?"":"400px"}}>
                 <img src={item?.poster} className='rounded-5' width={"100%"} alt="" />
                 <h4 className={`text-center fw-bold ${isMobile?"fs-6 px-3":"fs-4"} mb-2`}>{item?.name}</h4>
               </div>

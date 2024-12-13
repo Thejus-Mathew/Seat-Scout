@@ -6,9 +6,10 @@ const schema = mongoose.Schema({
         required:true,
         unique:true
     },
-    theatres:{
-        type:[String]
-    }
+    theatres:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Admins"
+    }]
 })
 
 const theatreList = mongoose.model("theatres",schema)

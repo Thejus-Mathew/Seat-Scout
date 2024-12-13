@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
-import movie22 from '../images/movies/movie22.avif'
-import movie2 from '../images/movies/movie2.avif'
 import Footer from '../components/Footer'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button, Modal } from 'react-bootstrap'
 import screen from '../images/screen.png'
 import { toast } from 'react-toastify'
-import { getAMovieAPI } from '../Services/allAPI'
+import { getAMovieAPI, getTheatresListApi } from '../Services/allAPI'
 
 function BookingStart() {
     const [isMobile] = useState(window.innerWidth<1000?true:false)
@@ -60,12 +58,34 @@ function BookingStart() {
           console.log("Failed to fetch movie data",err);
         }
       }
+
+    const [theatres,setTheatres]=useState([])
+    
+    const getTheatres = async() => {
+        try{
+            const token = sessionStorage.getItem("token")
+            const reqHeader = {
+                "Authorization":`Bearer ${token}`,
+                "Content-Type":"application/json"
+            }
+
+            const result = await getTheatresListApi(movieId,reqHeader)
+            if(result.status==200){
+                setTheatres(result.data.theatres)
+            }
+
+        }catch(err){
+          toast.warn("Failed to fetch theatres data")
+          console.log("Failed to fetch theatres data",err);
+        }
+    }
+    useEffect(()=>{
+    getMovie()
+    getTheatres()
+    },[])
+    console.log(theatres);
+    
   
-      useEffect(()=>{
-        getMovie()
-      },[])
-  
-      console.log(movie);
 
     const navigate = useNavigate()
 
@@ -92,11 +112,11 @@ function BookingStart() {
         }
     }
 
-    useEffect(()=>{
-        if(!language || !format){
-            setShowM(true)
-        }
-    },[language,format])
+    // useEffect(()=>{
+    //     if(!language || !format){
+    //         setShowM(true)
+    //     }
+    // },[language,format])
 
 
     const selectSeat = (item,item1)=>{
@@ -189,6 +209,31 @@ function BookingStart() {
                 </select>
             </div>
         </div>
+        {
+            theatres.length>0?
+            theatres.map((theatreItem,index1)=>(
+                <div key={index1} className="row mt-3 shadow py-3">
+                    <div className="col-4">
+                        <p>{theatreItem?.theatreName}, {theatreItem?.city}</p>
+                    </div>
+                    <div className="col-8 d-flex gap-1">
+                        <button className='btn text-success' onClick={()=>setShow(true)}>
+                            <div>12:00pm</div>
+                            <div>₹ 150</div>
+                        </button>
+                        <button className='btn text-success' onClick={()=>setShow(true)}>
+                            <div>06:00pm</div>
+                            <div>₹ 150</div>
+                        </button>
+                        <button className='btn text-success' onClick={()=>setShow(true)}>
+                            <div>09:00pm</div>
+                            <div>₹ 150</div>
+                        </button>
+                    </div>
+                </div>
+            ))
+            :<></>
+        }
         <div className="row mt-3 shadow py-3">
             <div className="col-4">
                 <p>Cinepolis: Centre Square Mall, Kochi</p>

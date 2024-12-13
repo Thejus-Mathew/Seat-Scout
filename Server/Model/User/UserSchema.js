@@ -22,29 +22,33 @@ const userSchema = new mongoose.Schema({
     },
     gender: {
         type: Boolean,
-        default: null
     },
     married: {
         type: Boolean,
-        default: null
     },
     pincode:{
         type:String,
+        default:""
     },
     address1:{
         type:String,
+        default:""
     },
     address2:{
         type:String,
+        default:""
     },
     landmark:{
         type:String,
+        default:""
     },
     state:{
         type:String,
+        default:""
     },
     city:{
         type:String,
+        default:""
     },
     profilePic:{
         type:String,

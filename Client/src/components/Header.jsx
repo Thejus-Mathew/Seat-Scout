@@ -146,7 +146,7 @@ function Header() {
               logged?
               <div className='d-flex justify-content-between align-items-center gap-3'>
                 <div className="avatar">
-                  <img src={sessionStorage.getItem("profilePic")??avatar} width={"50px"} height={"50px"} alt="profile" className='mb-2' style={{borderRadius:"50%"}} />
+                  <img src={sessionStorage.getItem("profilePic")?sessionStorage.getItem("profilePic"):avatar} width={"50px"} height={"50px"} alt="profile" className='mb-2' style={{borderRadius:"50%"}} />
                 </div>
                 <div className="name">
                   <h2 className='fs-4'>{sessionStorage.getItem("name")}</h2>

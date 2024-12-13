@@ -80,7 +80,12 @@ function Profile() {
 
   const handleUpdateUser =async () => {
     try{
-      if(!first || !second || !phone){
+      console.log(birthday);
+      console.log(married);
+      console.log(gender);
+      
+      
+      if(!first || !second || !phone || !birthday || married == null || married == null){
         toast.info("Fill required fields")
       }else{
         const token = sessionStorage.getItem("token")
@@ -173,7 +178,7 @@ function Profile() {
           </div>
           <div className="row p-2">
             <div className="col-4">
-              <p className=''>Birthday (Optional)</p>
+              <p className=''>Birthday</p>
             </div>
             <div className="col-8">
               <input type="date" className='form-control' value={birthday} onChange={(e)=>setBirthday(e.target.value)}/>
@@ -181,7 +186,7 @@ function Profile() {
           </div>
           <div className="row p-2">
             <div className="col-4">
-              <p className=''>Gender (Optional)</p>
+              <p className=''>Gender</p>
             </div>
             <div className="col-8">
               <button className={`btn ${gender==true?"btn-danger":""} me-3`} onClick={()=>setGender(true)}>Male</button>
@@ -190,7 +195,7 @@ function Profile() {
           </div>
           <div className="row p-2">
             <div className="col-4">
-              <p className=''>Married (Optional)</p>
+              <p className=''>Married</p>
             </div>
             <div className="col-8">
               <button className={`btn ${married==true?"btn-danger":""} me-3`} onClick={()=>setMarried(true)}>Yes</button>

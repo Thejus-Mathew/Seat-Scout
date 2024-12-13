@@ -5,6 +5,7 @@ const { postMovie, getMoviesForAdmin, getAMovie, getAllMovies, addToTheatreList,
 const { postBookings, getBookings } = require('../Controller/bookingsController')
 const { registerUser, loginUser, getUser, updateUser } = require('../Controller/userController')
 const multerConfig = require('../MiddleWare/multerMiddleware')
+const { getTheatreForMovie } = require('../Controller/userMovieController')
 const router = express.Router()
 
 
@@ -57,5 +58,7 @@ router.get('/getUser',jwtMiddleware,getUser)
 // update user details
 router.put('/updateUser',jwtMiddleware,multerConfig.single('profilePic'),updateUser)
 
+// get theatre details of a movie
+router.get('/getTheatreList/:movieId',jwtMiddleware,getTheatreForMovie)
 
 module.exports = router

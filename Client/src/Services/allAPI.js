@@ -71,3 +71,8 @@ export const getUserApi = async (reqHeader) => {
 export const updateUserApi = async (reqBody,reqHeader) => {
     return await commonAPI("PUT",`${serverURL}/updateUser`,reqBody,reqHeader)
 }
+
+// get theatres list of movie
+export const getTheatresListApi = async (movieId,reqHeader) => {
+    return await commonAPI("GET",`${serverURL}/getTheatreList/${movieId}`,"",reqHeader)
+}

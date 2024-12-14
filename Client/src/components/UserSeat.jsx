@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import screen from '../images/screen.png'
 import { toast } from 'react-toastify'
-import { getBookingAPI } from '../Services/allAPI'
+import { getBookingAPI, postBookingAPI } from '../Services/allAPI'
 import { useNavigate } from 'react-router-dom'
 
 function UserSeat({time,price,movieId,seat,timeId,theatreId}) {
@@ -14,13 +14,10 @@ function UserSeat({time,price,movieId,seat,timeId,theatreId}) {
         getBooking()
     },[])
     const [seatCount,setSeatCount] = useState(0)
+    const [selectedSeats,setSelectedSeats] = useState([])
 
     const navigate = useNavigate()
-
-    // console.log(uniqueId);
-    // console.log(movieId);
-    // console.log(theatreId);
-    console.log(bookedSeats);
+    
     
     
     
@@ -34,7 +31,8 @@ function UserSeat({time,price,movieId,seat,timeId,theatreId}) {
                 "Authorization":`Bearer ${token}`,
                 "Content-Type":"application/json"
             }
-            const result = await getBookingAPI(theatreId,movieId,uniqueId,reqHeader)            
+            const result = await getBookingAPI(theatreId,movieId,uniqueId,reqHeader)
+            
             if(result.status==200){
                 setBookedSeats(result.data)          
             }else{
@@ -61,7 +59,7 @@ function UserSeat({time,price,movieId,seat,timeId,theatreId}) {
             })
         }
     },[bookedSeats])
-
+    
 
     const selectSeat = (item,item1)=>{
     
@@ -70,11 +68,32 @@ function UserSeat({time,price,movieId,seat,timeId,theatreId}) {
                 return {...seats,[item]:{...seats[item],[item1]:2}}
             })
             setSeatCount(seatCount+1)
+            setSelectedSeats((data)=>{
+                data.push(`${item} ${item1}`)
+                return data
+            })
         }else if(seats[item][item1]==2){
             setSeats(()=>{
                 return {...seats,[item]:{...seats[item],[item1]:0}}
             })
             setSeatCount(seatCount-1)
+            setSelectedSeats(selectedSeats.filter((a)=>a != `${item} ${item1}`))
+        }
+    }
+
+    const handlePayment = async () => {
+        try{
+            const token = sessionStorage.getItem("token")
+            const reqHeader = {
+                "Authorization":`Bearer ${token}`,
+                "Content-Type":"application/json"
+            }
+            const result = await postBookingAPI({timeId:uniqueId,adminId:theatreId,movieId:movieId,seat:selectedSeats},reqHeader)
+            toast.success("Selected Seats have been booked successfully")
+            getBooking()
+            setSeatCount(0)
+        }catch(err){
+            toast.warn(err)
         }
     }
     
@@ -123,7 +142,7 @@ function UserSeat({time,price,movieId,seat,timeId,theatreId}) {
                 {
                     seatCount>0?
                     <div className="text-center bg-light border p-3 shadow" style={{position:"sticky",bottom:"0px"}}>
-                        <button className='btn btn-danger' onClick={()=>navigate('/payment')}>Pay ₹{seatCount*price}</button>
+                        <button className='btn btn-danger' onClick={()=>handlePayment()}>Pay ₹{seatCount*price}</button>
                     </div>:<></>
                 }
             </div>

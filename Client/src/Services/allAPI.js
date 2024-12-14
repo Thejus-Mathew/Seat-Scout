@@ -37,6 +37,11 @@ export const getBookingAPI = async (adminId,movieId,timeId,reqHeader)=>{
     return await commonAPI("GET",`${serverURL}/booking/${adminId}/${movieId}/${timeId}`,"",reqHeader)
 }
 
+// post booking
+export const postBookingAPI = async (reqBody,reqHeader)=>{
+    return await commonAPI("POST",`${serverURL}/booking`,reqBody,reqHeader)
+}
+
 // get All Movies
 export const getAllMoviesAPI = async(reqHeader)=>{
     return await commonAPI("GET",`${serverURL}/getAllMovies`,"",reqHeader)

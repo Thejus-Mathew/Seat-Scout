@@ -333,7 +333,7 @@ function AdminMovie() {
                 <div className="col-8 d-flex gap-1">
                     {
                       admin.movies[movieIndex]?.timeStamp[choseDate]?.map((item,index)=>(
-                        <AdminSeat key={index} time={item.time} price={item.price} seat={admin.seats} movieId={movieId} timeId={timeId}/>
+                        <AdminSeat key={item.time+timeId.month+"-"+timeId.day} time={item.time} price={item.price} seat={admin.seats} movieId={movieId} timeId={timeId}/>
                       ))
                     }
                 </div>

@@ -6,19 +6,22 @@ const bookingsSchemma = mongoose.Schema({
         required:true
     },
     movieId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref: "movies",
         required:true
     },
     adminId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref: "Admins",
         required:true
     },
     userId:{
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref: "users",
         required:true
     },
     seat:{
-        type:String,
+        type:[String],
         required:true
     }
 })

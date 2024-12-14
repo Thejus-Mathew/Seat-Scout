@@ -74,7 +74,8 @@ function BookingStart() {
                 "Authorization":`Bearer ${token}`,
                 "Content-Type":"application/json"
             }
-
+            console.log(token);
+            
             const result = await getTheatresListApi(movieId,reqHeader)
             if(result.status==200){
                 setTheatres(result.data.theatres)
@@ -89,7 +90,6 @@ function BookingStart() {
     getMovie()
     getTheatres()
     },[])
-    console.log(theatres);
     
   
 
@@ -156,7 +156,7 @@ function BookingStart() {
         setTimeId(day4)
     }
     },[choseDate])
-        
+    console.log(theatres);
 
   return (
     <div>
@@ -238,7 +238,7 @@ function BookingStart() {
                             theatreItem.movies.find(movieItem=>movieItem.movieId==movieId)
                             .timeStamp[choseDate]
                             .map((item,index)=>(
-                                <UserSeat key={index} time={item.time} price={item.price} seat={theatreItem.seats} movieId={movieId} theatreId={theatreItem._id} timeId={timeId}/>
+                                <UserSeat key={timeId.day+"-"+timeId.month+"-"+item.time} time={item.time} price={item.price} seat={theatreItem.seats} movieId={movieId} theatreId={theatreItem._id} timeId={timeId}/>
                             ))
                         }
                     </div>

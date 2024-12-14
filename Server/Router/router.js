@@ -2,7 +2,7 @@ const express = require('express')
 const { registerAdmin, loginAdmin, updateAdmin } = require('../Controller/adminController')
 const jwtMiddleware = require('../MiddleWare/jwtMiddleWare')
 const { postMovie, getMoviesForAdmin, getAMovie, getAllMovies, addToTheatreList, removeFromTheatreList } = require('../Controller/adminMovieController')
-const { postBookings, getBookings } = require('../Controller/bookingsController')
+const { postBookings, getBookings, getBookingsForUser } = require('../Controller/bookingsController')
 const { registerUser, loginUser, getUser, updateUser } = require('../Controller/userController')
 const multerConfig = require('../MiddleWare/multerMiddleware')
 const { getTheatreForMovie } = require('../Controller/userMovieController')
@@ -29,10 +29,13 @@ router.post('/adminMovie',jwtMiddleware,getMoviesForAdmin)
 router.get('/getAMovie/:movieId',getAMovie)
 
 // post booking
-router.post('/booking/',jwtMiddleware,postBookings)
+router.post('/booking',jwtMiddleware,postBookings)
 
 // get booking
 router.get('/booking/:adminId/:movieId/:timeId',jwtMiddleware,getBookings)
+
+// get booking for user
+router.get('/bookingUser',jwtMiddleware,getBookingsForUser)
 
 // get all movies
 router.get('/getAllMovies',getAllMovies)

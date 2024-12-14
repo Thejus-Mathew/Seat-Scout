@@ -10,7 +10,7 @@ import { getBookingAPI } from '../Services/allAPI'
 
 function AdminSeat({time,price,movieId,seat,timeId}) {
     const{admin,setAdmin}=useContext(adminContext)
-    const uniqueId = timeId.day+"-"+timeId.month+"-"+timeId.year+"-"+time
+    const uniqueId = timeId.month+"-"+timeId.day+"-"+timeId.year+"-"+time
 
     const [isMobile] = useState(window.innerWidth<1000?true:false)
     const[bookedSeats,setBookedSeats]=useState([])
@@ -26,8 +26,8 @@ function AdminSeat({time,price,movieId,seat,timeId}) {
                 "Authorization":`Bearer ${token}`,
                 "Content-Type":"application/json"
             }
-            const result = await getBookingAPI(admin._id,movieId,uniqueId,reqHeader)            
-            if(result.status==200){
+            const result = await getBookingAPI(admin._id,movieId,uniqueId,reqHeader)  
+            if(result.status==200){                
                 setBookedSeats(result.data)                
             }else{
                 toast.warn(result.message)

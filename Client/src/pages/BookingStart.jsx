@@ -74,7 +74,6 @@ function BookingStart() {
                 "Authorization":`Bearer ${token}`,
                 "Content-Type":"application/json"
             }
-            console.log(token);
             
             const result = await getTheatresListApi(movieId,reqHeader)
             if(result.status==200){
@@ -95,44 +94,6 @@ function BookingStart() {
 
     const navigate = useNavigate()
 
-
-    const [showM, setShowM] = useState(false);
-    const[language,setLanguage] = useState("")
-    const[format,setFormat] = useState("")
-    const [show, setShow] = useState(false);
-    const [seats,setSeats] = useState(()=>{
-        let obj = {}
-        for(let i=65;i<82;i++){
-            obj[String.fromCharCode(i)] ={}
-            for (let j=1;j<28;j++){
-                obj[String.fromCharCode(i)][`${j}`]=0
-            }
-        } 
-        return obj
-    })
-    const [seatCount,setSeatCount] = useState(0)
-
-    const handleCloseM = () => {
-        if(format && language){
-            setShowM(false)
-        }
-    }
-
-
-    const selectSeat = (item,item1)=>{
-
-        if (seats[item][item1]==0){
-            setSeats(()=>{
-                return {...seats,[item]:{...seats[item],[item1]:2}}
-            })
-            setSeatCount(seatCount+1)
-        }else if(seats[item][item1]==2){
-            setSeats(()=>{
-                return {...seats,[item]:{...seats[item],[item1]:0}}
-            })
-            setSeatCount(seatCount-1)
-        }
-    }
 
     useEffect(()=>{
         if(!sessionStorage.getItem("token")){
@@ -156,7 +117,6 @@ function BookingStart() {
         setTimeId(day4)
     }
     },[choseDate])
-    console.log(theatres);
 
   return (
     <div>
@@ -206,25 +166,6 @@ function BookingStart() {
                     <div>{day4.month}</div>
                 </button>
             </div>
-            <div className="col-4"></div>
-            <div className="col-4 d-flex align-items-center">
-                <select  className='form-control me-3' onChange={(e)=>setLanguage(e.target.value)} value={language}>
-                    <option value={""} disabled>Language</option>
-                    {
-                        movie?.languages && movie.languages.map((item,index)=>(
-                            <option key={index} value={item}>{item}</option>
-                        ))
-                    }
-                </select>
-                <select  className='form-control'onChange={(e)=>setFormat(e.target.value)} value={format}>
-                    <option value={""} disabled>Format</option>
-                    {
-                        movie?.format && movie.format.map((item,index)=>(
-                            <option key={index} value={item}>{item}</option>
-                        ))
-                    }
-                </select>
-            </div>
         </div>
         {
             theatres.length>0?
@@ -237,7 +178,7 @@ function BookingStart() {
                         {
                             theatreItem.movies.find(movieItem=>movieItem.movieId==movieId)
                             .timeStamp[choseDate]
-                            .map((item,index)=>(
+                            .map((item)=>(
                                 <UserSeat key={timeId.day+"-"+timeId.month+"-"+item.time} time={item.time} price={item.price} seat={theatreItem.seats} movieId={movieId} theatreId={theatreItem._id} timeId={timeId}/>
                             ))
                         }
@@ -248,100 +189,6 @@ function BookingStart() {
         }
       </div>
       <Footer/>
-
-
-
-      <Modal show={showM} onHide={handleCloseM}>
-        <Modal.Header closeButton={language && format}>
-          <Modal.Title>Movie Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <div className="d-flex flex-column gap-3">
-                <select className='form-control me-3' onChange={(e)=>setLanguage(e.target.value)} value={language}>
-                    <option value={""} disabled>Language</option>
-                    {
-                        movie?.languages && movie.languages.map((item,index)=>(
-                            <option key={index} value={item}>{item}</option>
-                        ))
-                    }
-                </select>
-                <select  className='form-control' onChange={(e)=>setFormat(e.target.value)} value={format}>
-                    <option value={""} disabled>Format</option>
-                    {
-                        movie?.format && movie.format.map((item,index)=>(
-                            <option key={index} value={item}>{item}</option>
-                        ))
-                    }
-                </select>
-            </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" disabled={!language || !format} onClick={handleCloseM}>
-            Close
-          </Button>
-          <Button variant="primary" disabled={!language || !format} onClick={handleCloseM}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-
-      <Modal show={show} fullscreen={true} onHide={() => setShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <h2 className='fw-bold'>A.R.M</h2>
-            <p className='fs-6'>Cinepolis: Centre Square Mall, Kochi | Tue 24 Oct | 09:00pm | English | 3D</p>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <div style={{width:isMobile?"70vw":"",minWidth:isMobile?"870px":""}}>
-                <p className='text-center mt-3'>All eyes this way please</p>
-                <div className='d-flex justify-content-center'><img src={screen} style={{minWidth:"300px",aspectRatio:"7/1"}} alt="" /></div>
-                <div className="seats d-flex align-items-center flex-column my-5" >
-                    {
-                        Object?.keys(seats).map((item,index)=>(
-                            (item == "D" || item == "N" )?
-                            <div key={index} className="d-flex justify-content-between mb-1" style={{width:"70vw",minWidth:"870px"}}>
-                                {
-                                    Object.keys(seats[item]).map((item1,index1)=>(
-                                        <div key={index1} className="d-flex justify-content-center align-items-center" style={{width:`${80/27}%`,aspectRatio:"1/1"}}>
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                            :
-                            <div key={index} className="d-flex justify-content-between mb-1" style={{width:"70vw",minWidth:"870px"}}>
-                                        <div className="bg-light d-flex justify-content-center align-items-center" style={{width:`${80/27}%`,aspectRatio:"1/1",fontSize:isMobile?"15px":"20px"}}>
-                                            {item}
-                                        </div>
-                                {
-                                    Object.keys(seats[item]).map((item1,index1)=>(
-                                        item1==8 || item1==19?
-                                        <div key={index1} className=" d-flex justify-content-center align-items-center" style={{width:`${80/27}%`,aspectRatio:"1/1",fontSize:isMobile?"10px":"15px"}}>  
-                                        </div>:
-                                        <div key={index1} className={`border ${seats[item][item1]==1?"bg-danger text-light":seats[item][item1]==0?"bg-light":seats[item][item1]==2?"bg-success text-light":"border-0 text-light"} d-flex justify-content-center align-items-center`} style={{width:`${80/27}%`,cursor:"pointer",aspectRatio:"1/1",fontSize:isMobile?"10px":"15px"}} onClick={()=>selectSeat(item,item1)}>
-                                            {item1}
-                                        </div>
-                                    ))
-                                }
-                                        <div className="bg-light d-flex justify-content-center align-items-center" style={{width:`${80/27}%`,aspectRatio:"1/1",fontSize:isMobile?"15px":"20px"}}>
-                                            {item}
-                                        </div>
-                            </div>
-                        ))
-                    }
-                </div>
-                {
-                    seatCount>0?
-                    <div className="text-center bg-light border p-3 shadow" style={{position:"sticky",bottom:"0px"}}>
-                        <button className='btn btn-danger' onClick={()=>navigate('/payment')}>Pay ₹{seatCount*150}</button>
-                    </div>:<></>
-                }
-            </div>
-        </Modal.Body>
-      </Modal>
-
-
     </div>
     
   )

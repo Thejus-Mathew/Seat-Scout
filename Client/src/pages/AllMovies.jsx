@@ -38,10 +38,6 @@ function AllMovies() {
       <div className="container my-5">
         <div className="row mb-3 px-3">
         <h3 className='fw-bold col'>Movies in {sessionStorage.getItem("city")}</h3>
-        <select defaultValue={""} className='form-control col'>
-          <option value="" disabled>Languages</option>
-          <option value="malayalam">Malayalam</option>
-        </select>
         </div>
         <div className="row">
         {

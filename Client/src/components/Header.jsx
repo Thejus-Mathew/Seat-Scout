@@ -17,6 +17,7 @@ import mumbai from '../images/mumbai.png'
 import pune from '../images/pune.png'
 import { Flip, toast ,ToastContainer} from 'react-toastify'
 import { allCities } from '../assets/allCities'
+import { getMovieNamesApi, getTheatreNamesApi } from '../Services/allAPI'
 
 
 function Header() {
@@ -40,6 +41,7 @@ function Header() {
     const [cities]=useState(allCities)
     const [city,setCity]=useState(sessionStorage.getItem("city")??"")
     const[searchCity,setSearchCity] = useState("")
+    const[searchvalue,setSearchValue]=useState("")
     
 
     const handleShowM = () => {
@@ -100,9 +102,53 @@ function Header() {
       navigate('/')
     }
 
+    const [movieNames,setMovieNames]=useState([])
+    const [theatreNames,setTheatreNames]=useState([])
+    const getMovieNames = async () => {
+        try{
+            const token = sessionStorage.getItem("token")
+            const reqHeader = {
+                "Authorization":`Bearer ${token}`,
+                "Content-Type":"application/json"
+            } 
+            const result = await getMovieNamesApi(reqHeader)
+            if(result.status==200){
+                setMovieNames(result.data)
+            }else{
+                toast.warn("Failed to fetch Movie details")
+                console.log("Failed to fetch Movie details")
+            }
+        }catch(err){
+            toast.warn("Failed to fetch Movie details")
+            console.log("Failed to fetch Movie details",err)
+        }
+    }
+    const getTheatreNames = async () => {
+        try{ 
+            const result = await getTheatreNamesApi()
+            if(result.status==200){
+                setTheatreNames(result.data)
+            }else{
+                toast.warn("Failed to fetch Theatre details")
+                console.log("Failed to fetch Theatre details")
+            }
+        }catch(err){
+            toast.warn("Failed to fetch Theatre details")
+            console.log("Failed to fetch Theatre details",err)
+        }
+    }
+    useEffect(()=>{
+      getMovieNames()
+      getTheatreNames()
+    },[])
 
-
-
+    const navigation = (id) => {
+      if(sessionStorage.getItem("token")){
+        navigate(`/theatre/${id}`)
+      }else{
+        toast.info("Please login to proceed booking")
+      }
+    }
 
   return (
     <div>
@@ -115,7 +161,36 @@ function Header() {
         </div>
         <div className={`d-flex align-items-center justify-content-between container ${isMobile?"mt-3":""}`}>
             <MDBInputGroup noBorder className='w-75' textBefore={<i className="fa-solid fa-magnifying-glass fa-xl"></i>}>
-                <input className='form-control' type='text' placeholder='Search Movies or Theatres' />
+                <input className='form-control' type='text' placeholder='Search Movies or Theatres' value={searchvalue} onChange={(e)=>setSearchValue(e.target.value)}/>
+                <br />
+                <div className="position-absolute z-index-10 w-75 mt-5 ms-5">
+                  {
+                    movieNames.length>0?
+                    movieNames
+                    .filter(item=>!searchvalue?false:true)
+                    .filter(item=>item.name.toLowerCase().includes(searchvalue.toLowerCase()))
+                    .slice(0,3)
+                    .map((item,index)=>(
+                      <div key={index} className="form-control pointer" onClick={()=>navigate(`/movie/${item?._id}`)}>
+                        {item?.name}
+                      </div>
+                    ))
+                    :<></>
+                  }
+                  {
+                    theatreNames.length>0?
+                    theatreNames
+                    .filter(item=>!searchvalue?false:true)
+                    .filter(item=>item.theatreName.toLowerCase().includes(searchvalue.toLowerCase()) || item.city.toLowerCase().includes(searchvalue.toLowerCase()))
+                    .slice(0,3)
+                    .map((item,index)=>(
+                      <div key={index} className="form-control pointer" onClick={()=>navigation(item._id)}>
+                        {item?.theatreName}, {item?.city}
+                      </div>
+                    ))
+                    :<></>
+                  }
+                </div>
             </MDBInputGroup>
             {
                 isMobile?<button className='btn' onClick={handleShowOC}><i className="fa-solid fa-bars fa-xl"></i></button>

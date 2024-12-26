@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 function UserSeat({time,price,movieId,seat,timeId,theatreId}) {
     const uniqueId = timeId.day+"-"+timeId.month+"-"+timeId.year+"-"+time
+    
 
     const [isMobile] = useState(window.innerWidth<1000?true:false)
     const[bookedSeats,setBookedSeats]=useState([])

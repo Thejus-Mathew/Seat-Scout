@@ -37,7 +37,7 @@ function Movies() {
         <div className="row">
           {
             allMovies.length>0?
-            allMovies.slice(0,5)
+            allMovies.slice(0,4)
             .map((item,index)=>(
               <div key={index} className="col d-flex flex-column border rounded-5 m-1 shadow" onClick={()=>navigate(`/movie/${item?._id}`)} style={{cursor:"pointer",minWidth:isMobile?"150px":"300px",maxWidth:isMobile?"":"400px"}}>
                 <img src={item?.poster} className='rounded-5' width={"100%"} alt="" />

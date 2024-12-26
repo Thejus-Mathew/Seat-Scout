@@ -81,3 +81,23 @@ export const updateUserApi = async (reqBody,reqHeader) => {
 export const getTheatresListApi = async (movieId,reqHeader) => {
     return await commonAPI("GET",`${serverURL}/getTheatreList/${movieId}`,"",reqHeader)
 }
+
+// get all theatres
+export const getAllTheatresApi = async () => {
+    return await commonAPI("GET",`${serverURL}/getAllTheatres`,"","")
+}
+
+// get a theatre
+export const getATheatreApi = async (theatreId,reqHeader) => {
+    return await commonAPI("GET",`${serverURL}/getATheatre/${theatreId}`,"",reqHeader)
+}
+
+// get movie names
+export const getMovieNamesApi = async (reqHeader) => {
+    return await commonAPI("GET",`${serverURL}/getMovieNames`,"",reqHeader)
+}
+
+// get theatre names
+export const getTheatreNamesApi = async () => {
+    return await commonAPI("GET",`${serverURL}/getTheatreNames`,"","")
+}

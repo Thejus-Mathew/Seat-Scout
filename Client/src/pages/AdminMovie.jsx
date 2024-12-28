@@ -175,13 +175,13 @@ function AdminMovie() {
         if(choseDate == weekNum){
           setTimeId(day1)
         }
-        else if(choseDate == weekNum+1){
+        else if(choseDate == (weekNum+1>7?weekNum+1-7:weekNum+1)){
           setTimeId(day2)
         }
-        else if(choseDate == weekNum+2){
+        else if(choseDate == (weekNum+2>7?weekNum+2-7:weekNum+2)){
           setTimeId(day3)
         }
-        else if(choseDate == weekNum+3){
+        else if(choseDate == (weekNum+3>7?weekNum+3-7:weekNum+3)){
           setTimeId(day4)
         }
       },[choseDate])
@@ -332,8 +332,8 @@ function AdminMovie() {
             <div className="row mt-3 py-3">
                 <div className="col-8 d-flex gap-1">
                     {
-                      admin.movies[movieIndex]?.timeStamp[choseDate]?.map((item,index)=>(
-                        <AdminSeat key={item.time+timeId.month+"-"+timeId.day} time={item.time} price={item.price} seat={admin.seats} movieId={movieId} timeId={timeId}/>
+                      admin.movies[movieIndex]?.timeStamp[choseDate]?.map((item)=>(
+                        <AdminSeat key={item.time+timeId.month+"-"+timeId.day} time={item.time} price={item.price} seat={admin.seats} movieId={movieId} timeId={timeId} language={admin.movies[movieIndex]?.language} format={admin.movies[movieIndex]?.format} movieName={gotMovie?.name} theatreName={`${admin?.theatreName}, ${admin?.city}`}/>
                       ))
                     }
                 </div>

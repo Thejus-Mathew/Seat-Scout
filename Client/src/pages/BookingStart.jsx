@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Button, Modal } from 'react-bootstrap'
-import screen from '../images/screen.png'
 import { toast } from 'react-toastify'
 import { getAMovieAPI, getTheatresListApi } from '../Services/allAPI'
 import UserSeat from '../components/UserSeat'
@@ -86,8 +84,8 @@ function BookingStart() {
         }
     }
     useEffect(()=>{
-    getMovie()
-    getTheatres()
+        getMovie()
+        getTheatres()
     },[])
     
   
@@ -107,16 +105,17 @@ function BookingStart() {
     if(choseDate == weekNum){
         setTimeId(day1)
     }
-    else if(choseDate == weekNum+1){
+    else if(choseDate == (weekNum+1>7?weekNum+1-7:weekNum+1)){
         setTimeId(day2)
     }
-    else if(choseDate == weekNum+2){
+    else if(choseDate == (weekNum+2>7?weekNum+2-7:weekNum+2)){
         setTimeId(day3)
     }
-    else if(choseDate == weekNum+3){
+    else if(choseDate == (weekNum+3>7?weekNum+3-7:weekNum+3)){
         setTimeId(day4)
     }
     },[choseDate])
+    
 
   return (
     <div>
@@ -179,7 +178,7 @@ function BookingStart() {
                             theatreItem.movies.find(movieItem=>movieItem.movieId==movieId)
                             .timeStamp[choseDate]
                             .map((item)=>(
-                                <UserSeat key={timeId.day+"-"+timeId.month+"-"+item.time} time={item.time} price={item.price} seat={theatreItem.seats} movieId={movieId} theatreId={theatreItem._id} timeId={timeId}/>
+                                <UserSeat key={timeId.day+"-"+timeId.month+"-"+item.time+"-"+choseDate} time={item.time} price={item.price} seat={theatreItem.seats} movieId={movieId} theatreId={theatreItem._id} timeId={timeId} language={theatreItem.movies.find(movieItem=>movieItem.movieId==movieId).language} format={theatreItem.movies.find(movieItem=>movieItem.movieId==movieId).format} movieName={movie?.name} theatreName={`${theatreItem?.theatreName}, ${theatreItem?.city}`}/>
                             ))
                         }
                     </div>

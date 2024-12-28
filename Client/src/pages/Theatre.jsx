@@ -54,13 +54,13 @@ function Theatre() {
         if(choseDate == weekNum){
             setTimeId(day1)
         }
-        else if(choseDate == weekNum+1){
+        else if(choseDate == (weekNum+1>7?weekNum+1-7:weekNum+1)){
             setTimeId(day2)
         }
-        else if(choseDate == weekNum+2){
+        else if(choseDate == (weekNum+2>7?weekNum+2-7:weekNum+2)){
             setTimeId(day3)
         }
-        else if(choseDate == weekNum+3){
+        else if(choseDate == (weekNum+3>7?weekNum+3-7:weekNum+3)){
             setTimeId(day4)
         }
     },[choseDate])
@@ -160,7 +160,7 @@ function Theatre() {
                         {
                             item.timeStamp[choseDate]
                             .map((item2)=>(
-                                <UserSeat key={timeId.day+"-"+timeId.month+"-"+item2.time} time={item2.time} price={item2.price} seat={theatre?.seats} movieId={item?.movieId} theatreId={theatreId} timeId={timeId}/>
+                                <UserSeat key={timeId.day+"-"+timeId.month+"-"+item2.time} time={item2.time} price={item2.price} seat={theatre?.seats} movieId={item?.movieId} theatreId={theatreId} timeId={timeId} language={item?.language} format={item?.format} movieName={movieNames.find(movie=>movie._id==item?.movieId)?.name} theatreName={`${theatre?.theatreName}, ${theatre?.city}`}/>
                             ))
                         }
                     </div>

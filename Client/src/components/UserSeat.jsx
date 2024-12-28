@@ -5,10 +5,9 @@ import { toast } from 'react-toastify'
 import { getBookingAPI, postBookingAPI } from '../Services/allAPI'
 import { useNavigate } from 'react-router-dom'
 
-function UserSeat({time,price,movieId,seat,timeId,theatreId}) {
+function UserSeat({time,price,movieId,seat,timeId,theatreId, format, language, movieName, theatreName}) {
     const uniqueId = timeId.day+"-"+timeId.month+"-"+timeId.year+"-"+time
-    
-
+        
     const [isMobile] = useState(window.innerWidth<1000?true:false)
     const[bookedSeats,setBookedSeats]=useState([])
     useEffect(()=>{
@@ -111,8 +110,8 @@ function UserSeat({time,price,movieId,seat,timeId,theatreId}) {
         <Modal show={show} fullscreen={true} onHide={() => setShow(false)}>
         <Modal.Header closeButton>
             <Modal.Title>
-            <h2 className='fw-bold'>A.R.M</h2>
-            <p className='fs-6'>Cinepolis: Centre Square Mall, Kochi | Tue 24 Oct | 09:00pm | English | 3D</p>
+            <h2 className='fw-bold'>{movieName}</h2>
+            <p className='fs-6'>{theatreName} | {timeId?.week} {timeId?.month} {timeId?.day} | {time} | {language} | {format}</p>
             </Modal.Title>
         </Modal.Header>
         <Modal.Body>

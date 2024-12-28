@@ -8,7 +8,7 @@ import { getBookingAPI } from '../Services/allAPI'
 
 
 
-function AdminSeat({time,price,movieId,seat,timeId}) {
+function AdminSeat({time,price,movieId,seat,timeId, format, language, movieName, theatreName}) {
     const{admin,setAdmin}=useContext(adminContext)
     const uniqueId = timeId.month+"-"+timeId.day+"-"+timeId.year+"-"+time
 
@@ -82,8 +82,8 @@ function AdminSeat({time,price,movieId,seat,timeId}) {
         <Modal show={show} fullscreen={true} onHide={() => setShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <h2 className='fw-bold'>A.R.M</h2>
-            <p className='fs-6'>Cinepolis: Centre Square Mall, Kochi | Tue 24 Oct | 09:00pm | English | 3D</p>
+          <h2 className='fw-bold'>{movieName}</h2>
+          <p className='fs-6'>{theatreName} | {timeId?.week} {timeId?.day} {timeId?.month} | {time} | {language} | {format}</p>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

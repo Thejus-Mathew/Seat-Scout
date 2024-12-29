@@ -158,7 +158,7 @@ function Theatre() {
                     </div>
                     <div className="col-8 d-flex gap-1">
                         {
-                            item.timeStamp[choseDate]
+                            item.timeStamp[choseDate==0?7:choseDate]
                             .map((item2)=>(
                                 <UserSeat key={timeId.day+"-"+timeId.month+"-"+item2.time} time={item2.time} price={item2.price} seat={theatre?.seats} movieId={item?.movieId} theatreId={theatreId} timeId={timeId} language={item?.language} format={item?.format} movieName={movieNames.find(movie=>movie._id==item?.movieId)?.name} theatreName={`${theatre?.theatreName}, ${theatre?.city}`}/>
                             ))

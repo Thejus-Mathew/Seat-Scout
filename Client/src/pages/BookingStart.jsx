@@ -176,8 +176,8 @@ function BookingStart() {
                     <div className="col-8 d-flex gap-1">
                         {
                             theatreItem.movies.find(movieItem=>movieItem.movieId==movieId)
-                            .timeStamp[choseDate]
-                            .map((item)=>(
+                            .timeStamp[choseDate==0?7:choseDate]
+                            ?.map((item)=>(
                                 <UserSeat key={timeId.day+"-"+timeId.month+"-"+item.time+"-"+choseDate} time={item.time} price={item.price} seat={theatreItem.seats} movieId={movieId} theatreId={theatreItem._id} timeId={timeId} language={theatreItem.movies.find(movieItem=>movieItem.movieId==movieId).language} format={theatreItem.movies.find(movieItem=>movieItem.movieId==movieId).format} movieName={movie?.name} theatreName={`${theatreItem?.theatreName}, ${theatreItem?.city}`}/>
                             ))
                         }

@@ -332,7 +332,7 @@ function AdminMovie() {
             <div className="row mt-3 py-3">
                 <div className="col-8 d-flex gap-1">
                     {
-                      admin.movies[movieIndex]?.timeStamp[choseDate]?.map((item)=>(
+                      admin.movies[movieIndex]?.timeStamp[choseDate==0?7:choseDate]?.map((item)=>(
                         <AdminSeat key={item.time+timeId.month+"-"+timeId.day} time={item.time} price={item.price} seat={admin.seats} movieId={movieId} timeId={timeId} language={admin.movies[movieIndex]?.language} format={admin.movies[movieIndex]?.format} movieName={gotMovie?.name} theatreName={`${admin?.theatreName}, ${admin?.city}`}/>
                       ))
                     }

@@ -17,7 +17,10 @@
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18.3.1",
+    "react-loader-spinner": "^6.1.6",
+    "react-qr-code": "^2.0.15",
     "react-router-dom": "^6.27.0",
+    "react-spinners": "^0.15.0",
     "react-toastify": "^10.0.6"
   },
   "devDependencies": {

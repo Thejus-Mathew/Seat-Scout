@@ -3,7 +3,6 @@ import { Modal } from 'react-bootstrap'
 import screen from '../images/screen.png'
 import { toast } from 'react-toastify'
 import { getBookingAPI, postBookingAPI } from '../Services/allAPI'
-import { useNavigate } from 'react-router-dom'
 
 function UserSeat({time,price,movieId,seat,timeId,theatreId, format, language, movieName, theatreName}) {
     const uniqueId = timeId.day+"-"+timeId.month+"-"+timeId.year+"-"+time
@@ -15,9 +14,7 @@ function UserSeat({time,price,movieId,seat,timeId,theatreId, format, language, m
     },[])
     const [seatCount,setSeatCount] = useState(0)
     const [selectedSeats,setSelectedSeats] = useState([])
-
-    const navigate = useNavigate()
-    
+    const [loading,setLoading]=useState(false)
     
     
     
@@ -82,6 +79,7 @@ function UserSeat({time,price,movieId,seat,timeId,theatreId, format, language, m
     }
 
     const handlePayment = async () => {
+        setLoading(true)
         try{
             const token = sessionStorage.getItem("token")
             const reqHeader = {
@@ -92,9 +90,11 @@ function UserSeat({time,price,movieId,seat,timeId,theatreId, format, language, m
             toast.success("Selected Seats have been booked successfully")
             getBooking()
             setSeatCount(0)
+            setSelectedSeats([])
         }catch(err){
             toast.warn(err)
         }
+        setLoading(false)
     }
     
   return (
@@ -142,7 +142,7 @@ function UserSeat({time,price,movieId,seat,timeId,theatreId, format, language, m
                 {
                     seatCount>0?
                     <div className="text-center bg-light border p-3 shadow" style={{position:"sticky",bottom:"0px"}}>
-                        <button className='btn btn-danger' onClick={()=>handlePayment()}>Pay ₹{seatCount*price}</button>
+                        <button className='btn btn-danger' onClick={()=>handlePayment()}>{loading?<i class="fa-solid fs-4 px-3 fa-circle-notch fa-spin"></i>:`Pay ₹${seatCount*price}`}</button>
                     </div>:<></>
                 }
             </div>

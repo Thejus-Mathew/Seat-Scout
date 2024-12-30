@@ -246,9 +246,13 @@ function Header() {
           <div className='border-bottom py-3 ' onClick={()=>navigate("/theatres")} style={{cursor:"pointer"}}>
             Theatres
           </div>
-          <div className='border-bottom py-3' onClick={()=>navigate("/bookings")} style={{cursor:"pointer"}}>
-            Bookings
-          </div>
+          {
+            logged?
+            <div className='border-bottom py-3' onClick={()=>navigate("/bookings")} style={{cursor:"pointer"}}>
+              Bookings
+            </div>:
+            <></>
+          }
           <div className='border-bottom py-3' onClick={toAdmin} style={{cursor:"pointer"}}>
             Admin Section
           </div>

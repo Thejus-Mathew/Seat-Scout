@@ -106,3 +106,8 @@ export const getTheatreNamesApi = async () => {
 export const checkServerApi = async () => {
     return await commonAPI("GET",`${serverURL}/`,"","")
 }
+
+// get booking for user
+export const getBookingsUserApi = async (reqHeader) => {
+    return await commonAPI("GET",`${serverURL}/bookingUser`,"",reqHeader)
+}

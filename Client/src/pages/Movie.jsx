@@ -4,6 +4,7 @@ import Footer from '../components/Footer'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { getAMovieAPI } from '../Services/allAPI'
+import { InfinitySpin } from 'react-loader-spinner'
 
 
 
@@ -12,12 +13,14 @@ function Movie() {
     const navigate = useNavigate()
     const [movie,setMovie]=useState({})
     const {movieId} = useParams()
+    const [loading,setLoading]=useState(true)
 
     const getMovie = async () => {
       try{
         const result = await getAMovieAPI(movieId)
         if(result.status==200){
           setMovie(result.data)
+          setLoading(false)
         }else{
           toast.warn("Failed to fetch movie data")
         }
@@ -44,6 +47,10 @@ function Movie() {
   return (
     <div>
       <Header/>
+      {
+      loading?
+      <div className='d-flex justify-content-center align-items-center' style={{height:"60dvh"}}><InfinitySpin visible={true} width="200" color="#000000" ariaLabel="infinity-spin-loading"/></div>:
+      <>
       <div className="bgbg" style={{backgroundImage:`url(${movie?.cover})`,height:`${isMobile?"200px":"500px"}`}}>
         <div className={`bg d-flex ${isMobile?"py-2":"p-5 py-4"}`}>
             <img src={movie?.poster} className={`${isMobile?"ms-2":"ms-5 me-5"}`} alt="" />
@@ -97,6 +104,8 @@ function Movie() {
           }
         </ul>
       </div>
+      </>
+      }
       <Footer/>
     </div>
   )

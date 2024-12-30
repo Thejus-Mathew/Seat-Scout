@@ -5,6 +5,7 @@ import Movies from '../components/Movies'
 import Theatres from '../components/Theatres'
 import Footer from '../components/Footer'
 import { checkServerApi } from '../Services/allAPI'
+import RingLoader from "react-spinners/RingLoader";
 
 function Home() {
   const[loading,setLoading]=useState(true)
@@ -35,7 +36,8 @@ function Home() {
       {
         loading?
         <div className="d-flex justify-content-center align-items-center flex-column" style={{height:"100dvh"}}>
-          <div>Connecting to sever <i class=" fa-solid fa-circle-notch fa-spin"></i></div>
+          <RingLoader/>
+          <div>Connecting to sever...</div>
           <div>It may take upto 50 seconds or more. Due to inactivity</div>
         </div> :
         <>

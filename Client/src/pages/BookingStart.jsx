@@ -5,9 +5,12 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { getAMovieAPI, getTheatresListApi } from '../Services/allAPI'
 import UserSeat from '../components/UserSeat'
+import { InfinitySpin } from 'react-loader-spinner'
 
 function BookingStart() {
     const [isMobile] = useState(window.innerWidth<1000?true:false)
+    const [loading,setloading]=useState(true)
+    const [loading1,setloading1]=useState(true)
     const date1 = new Date()
     const weekNum = date1.getDay()
     const date2 = new Date(Number(date1)+(1000*60*60*24))
@@ -54,6 +57,7 @@ function BookingStart() {
           const result = await getAMovieAPI(movieId)
           if(result.status==200){
             setMovie(result.data)
+            setloading(false)
           }else{
             toast.warn("Failed to fetch movie data")
           }
@@ -76,6 +80,7 @@ function BookingStart() {
             const result = await getTheatresListApi(movieId,reqHeader)
             if(result.status==200){
                 setTheatres(result.data.theatres)
+                setloading1(false)
             }
 
         }catch(err){
@@ -120,6 +125,10 @@ function BookingStart() {
   return (
     <div>
       <Header/>
+      {
+        loading || loading1?
+        <div className='d-flex justify-content-center align-items-center' style={{height:"60dvh"}}><InfinitySpin visible={true} width="200" color="#000000" ariaLabel="infinity-spin-loading"/></div>:
+        <>
       <div className="bgbg" style={{backgroundImage:`url(${movie?.cover})`,height:`${isMobile?"200px":"500px"}`}}>
         <div className={`bg d-flex ${isMobile?"py-2":"p-5 py-4"}`}>
             <img src={movie?.poster} className={`${isMobile?"ms-2":"ms-5 me-5"}`} alt="" />
@@ -173,7 +182,7 @@ function BookingStart() {
                     <div className="col-4">
                         <p>{theatreItem?.theatreName}, {theatreItem?.city}</p>
                     </div>
-                    <div className="col-8 d-flex gap-1">
+                    <div className="col-8 d-flex gap-1 py-1" style={{overflowX:isMobile?"scroll":""}}>
                         {
                             theatreItem.movies.find(movieItem=>movieItem.movieId==movieId)
                             .timeStamp[choseDate==0?7:choseDate]
@@ -187,9 +196,10 @@ function BookingStart() {
             :<></>
         }
       </div>
+        </>
+        }
       <Footer/>
-    </div>
-    
+    </div>    
   )
 }
 

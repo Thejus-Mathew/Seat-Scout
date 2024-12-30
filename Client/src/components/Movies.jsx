@@ -3,17 +3,20 @@ import './Movies.css'
 import { useNavigate } from 'react-router-dom'
 import { getAllMoviesAPI } from '../Services/allAPI'
 import { toast } from 'react-toastify'
+import { InfinitySpin } from 'react-loader-spinner'
 
 function Movies() {
     const [isMobile] = useState(window.innerWidth<1000?true:false)
     const [allMovies,setAllMovies]=useState([])
     const navigate = useNavigate()
+    const [loading,setloading]=useState(true)
 
     const getAllMovies = async () => {
       try{
         const result = await getAllMoviesAPI()
         if(result.status==200){
           setAllMovies(result.data)
+          setloading(false)
         }else{
           toast.warn("Failed to fetch all movies")
         }
@@ -36,6 +39,8 @@ function Movies() {
         <p className='text-end text-danger m-2' onClick={()=>navigate('/movies')} style={{cursor:"pointer"}}>See All <i className="fa-solid fa-angle-right fa-2xs"></i></p>
         <div className="row">
           {
+            loading?
+            <div className='d-flex justify-content-center align-items-center' style={{height:"30dvh"}}><InfinitySpin visible={true} width="200" color="#000000" ariaLabel="infinity-spin-loading"/></div>:
             allMovies.length>0?
             allMovies.slice(0,4)
             .map((item,index)=>(

@@ -80,11 +80,6 @@ function Profile() {
 
   const handleUpdateUser =async () => {
     try{
-      console.log(birthday);
-      console.log(married);
-      console.log(gender);
-      
-      
       if(!first || !second || !phone || !birthday || married == null || married == null){
         toast.info("Fill required fields")
       }else{

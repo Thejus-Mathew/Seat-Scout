@@ -3,8 +3,10 @@ import './Movies.css'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { getAllTheatresApi } from '../Services/allAPI'
+import { InfinitySpin } from 'react-loader-spinner'
 
 function Theatres() {
+    const [loading,setLoading]=useState(true)
     const [isMobile] = useState(window.innerWidth<1000?true:false)
     const navigate = useNavigate()
     const [theatres,setTheatres]=useState([])
@@ -13,6 +15,7 @@ function Theatres() {
       try{
         const result = await getAllTheatresApi()        
         if(result.status == 200){
+          setLoading(false)
           setTheatres(result.data)
         }else{
           toast.warn("Failed to fetch theatres")
@@ -20,7 +23,7 @@ function Theatres() {
         }
       }catch(err){
         toast.warn("Failed to fetch theatres")
-        console.log("Failed to fetch theatres",err); 
+        console.log("Failed to fetch theatres",err);
       }
     }
 
@@ -46,6 +49,8 @@ function Theatres() {
       <p className='text-end text-danger m-2' onClick={()=>navigate('/theatres')} style={{cursor:"pointer"}}>See All <i className="fa-solid fa-angle-right fa-2xs"></i></p>
       <div className="row gap-2 px-3">
         {
+          loading?
+          <div className='d-flex justify-content-center align-items-center' style={{height:"30dvh"}}><InfinitySpin visible={true} width="200" color="#000000" ariaLabel="infinity-spin-loading"/></div>:
           theatres.length>0?
           theatres.slice(0,5).map((item,index)=>(
             <div key={index} className="col p-3 card border shadow" style={{minWidth:isMobile?"60%":"30%",cursor:"pointer"}} onClick={()=>navigation(item?._id)}>

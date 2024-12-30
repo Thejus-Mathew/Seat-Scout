@@ -101,3 +101,8 @@ export const getMovieNamesApi = async (reqHeader) => {
 export const getTheatreNamesApi = async () => {
     return await commonAPI("GET",`${serverURL}/getTheatreNames`,"","")
 }
+
+// check server
+export const checkServerApi = async () => {
+    return await commonAPI("GET",`${serverURL}/`,"","")
+}

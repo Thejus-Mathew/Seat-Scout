@@ -6,6 +6,7 @@ import { getUserApi, updateUserApi } from '../Services/allAPI'
 import { toast } from 'react-toastify'
 import { serverURL } from '../Services/serverURL'
 import { useNavigate } from 'react-router-dom'
+import { InfinitySpin } from 'react-loader-spinner'
 
 function Profile() {
   const [isMobile] = useState(window.innerWidth<1000?true:false)
@@ -25,6 +26,7 @@ function Profile() {
   const[city,setCity]=useState("")
   const[email,setEmail]=useState("")
   const[currentPic,setCurrentPic]=useState("")
+  const[loading,setLoading]=useState(true)
 
   const navigate = useNavigate()
 
@@ -54,7 +56,6 @@ function Profile() {
       }
 
       const result = await getUserApi(reqHeader)
-      console.log(result);
       if(result.status==200){
         setGender(result.data.gender)
         setMarried(result.data.married)
@@ -70,6 +71,7 @@ function Profile() {
         setLandmark(result.data.landmark)
         setState(result.data.state)
         setCity(result.data.city)
+        setLoading(false)
       }else{
         toast.warn(result?.response?.data?result.response.data:result.message)
       }
@@ -79,6 +81,7 @@ function Profile() {
   }
 
   const handleUpdateUser =async () => {
+    setLoading(true)
     try{
       if(!first || !second || !phone || !birthday || married == null || married == null){
         toast.info("Fill required fields")
@@ -125,6 +128,10 @@ function Profile() {
   return (
     <div className='px-1'>
         <Header/>
+        {
+          loading?
+          <div className='d-flex justify-content-center align-items-center' style={{height:"60dvh"}}><InfinitySpin visible={true} width="200" color="#000000" ariaLabel="infinity-spin-loading"/></div>:
+          <>
         <div className={`container p-0 shadow mt-5 ${isMobile?"":"w-50"} rounded`} style={{backgroundColor:"rgb(240,240,240)",overflow:"hidden"}}>
           <div className="top p-3 d-flex align-items-center gap-5">
             <div className="profile position-relative bg-light ms-3" style={{borderRadius:"50%",height:"60px",width:"60px"}}>
@@ -252,6 +259,8 @@ function Profile() {
         <div className="container-fluid p-3 text-center bg-light mb-3" style={{position:"sticky",bottom:"0px"}}>
           <button className='btn btn-danger' onClick={()=>handleUpdateUser()}>Save Changes</button>
         </div>
+        </>
+        }
         <Footer/>
     </div>
   )

@@ -165,7 +165,7 @@ function Theatre() {
                         <p className='m-0 ' style={{cursor:"pointer"}} onClick={()=>navigate('/movie')}>{movieNames.find(movie=>movie._id==item?.movieId)?.name} ({movieNames.find(movie=>movie._id==item?.movieId)?.rated})</p>
                         <p className='m-0' style={{fontSize:"13px"}}>{item?.language}, {item?.format}</p>
                     </div>
-                    <div className="col-8 d-flex gap-1">
+                    <div className="col-8 d-flex gap-1 py-1" style={{overflowX:isMobile?"scroll":""}}>
                         {
                             item.timeStamp[choseDate==0?7:choseDate]
                             .map((item2)=>(

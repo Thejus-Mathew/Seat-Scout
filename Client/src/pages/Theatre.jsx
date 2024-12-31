@@ -5,11 +5,14 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { getATheatreApi, getMovieNamesApi } from '../Services/allAPI'
 import UserSeat from '../components/UserSeat'
+import { InfinitySpin } from 'react-loader-spinner'
 
 function Theatre() {
     const {theatreId} = useParams()
     const [theatre,setTheatre]=useState({})
     const [movieNames,setMovieNames]=useState([])
+    const [loading,setLoading]=useState(true)
+    const [loading1,setLoading1]=useState(true)
 
     const [isMobile] = useState(window.innerWidth<1000?true:false)
     const date1 = new Date()
@@ -78,6 +81,7 @@ function Theatre() {
             const result = await getATheatreApi(theatreId,reqHeader)
             if(result.status==200){
                 setTheatre(result.data)
+                setLoading(false)
             }else{
                 toast.warn("Failed to fetch Theatre details")
                 console.log("Failed to fetch Theatre details",err)
@@ -100,6 +104,7 @@ function Theatre() {
             const result = await getMovieNamesApi(reqHeader)
             if(result.status==200){
                 setMovieNames(result.data)
+                setLoading1(false)
             }else{
                 toast.warn("Failed to fetch Movie details")
                 console.log("Failed to fetch Movie details",err)
@@ -119,6 +124,10 @@ function Theatre() {
   return (
     <div>
       <Header/>
+      {
+        loading || loading1?
+        <div className='d-flex justify-content-center align-items-center' style={{height:"65dvh"}}><InfinitySpin visible={true} width="200" color="#000000" ariaLabel="infinity-spin-loading"/></div>:
+        <>
       <div className="container mt-5">
         <h2 className='fw-bold'>{theatre?.theatreName}, {theatre?.city}</h2>
         <p>{theatre?.address}, {theatre?.landmark}, {theatre?.city}, {theatre?.state}, {theatre?.pinCode}, India</p>
@@ -169,6 +178,8 @@ function Theatre() {
             :<></>   
         }    
       </div>
+      </>
+        }
       <Footer/>
     </div>
     

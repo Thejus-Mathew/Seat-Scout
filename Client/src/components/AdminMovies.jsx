@@ -6,10 +6,12 @@ import { MDBInput } from 'mdb-react-ui-kit'
 import { toast } from 'react-toastify'
 import { addMovieAPI, addToTheatreListAPI, getAllMoviesAPI, getMoviesAdminAPI } from '../Services/allAPI'
 import { adminContext } from '../Context/Context'
+import { InfinitySpin } from 'react-loader-spinner'
 
 
 function AdminMovies() {
   const{admin,setAdmin}=useContext(adminContext)
+  const[loading,setLoading]=useState(true)
     const [isMobile] = useState(window.innerWidth<1000?true:false)
     const navigate = useNavigate()
     const[movie,setMovie]=useState({
@@ -137,6 +139,7 @@ function AdminMovies() {
     const[movies,setMovies]=useState([])
 
     const getMoviesAdmin = async () =>{
+      setLoading(true)
       const token = sessionStorage.getItem("token")
       if (token){
         try{       
@@ -149,6 +152,7 @@ function AdminMovies() {
           
           if(result.status==200){
             setMovies(result.data)
+            setLoading(false)
           }else{
             setMovies([])
           }
@@ -216,6 +220,8 @@ function AdminMovies() {
         </div>
         <div className="row">
           {
+            loading?
+            <div className='d-flex justify-content-center align-items-center' style={{height:"30dvh"}}><InfinitySpin visible={true} width="200" color="#000000" ariaLabel="infinity-spin-loading"/></div>:
             movies.length>0?movies.map((item,index)=>(
               <div key={index} className="col d-flex flex-column border rounded-5 m-1 mb-3 shadow" onClick={()=>navigate(`/adminmovie/${item?._id}`)} style={{cursor:"pointer",minWidth:isMobile?"":"300px",maxWidth:isMobile?"":"400px"}}>
                 <img src={item?.poster} className='rounded-5' width={"100%"} alt="" />

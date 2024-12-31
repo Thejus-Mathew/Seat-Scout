@@ -93,7 +93,7 @@ function Bookings() {
                 <div className='fs-5'>Time: {bookeditem.timeId && bookeditem?.timeId.split("-").join(" ").slice(11)}</div>
                 <div className='fs-5'>Seats: <span className='fw-bolder'>{bookeditem.seat && bookeditem?.seat.join(", ")}</span></div>
               </div>
-              <div className="mt-5 pt-5 d-flex justify-content-between">
+              <div className="mt-5 pt-5 d-flex justify-content-evenly">
                 <span>Scan QR Code: </span>
                 <QRCode style={{ height: "auto", maxWidth: "40%", width: "40%" }} value={`${sessionStorage.getItem("name")} --- ${bookeditem.adminId && bookeditem?.movieId[0]?.name} --- ${bookeditem.adminId && bookeditem?.adminId[0]?.theatreName}, ${bookeditem.adminId && bookeditem?.adminId[0]?.city} --- ${bookeditem.adminId && bookeditem?.timeId.split("-").join(" ")} --- ${bookeditem.adminId && bookeditem?.seat.join(", ")} --- ${bookeditem.adminId && bookeditem?._id}`}/>
               </div>

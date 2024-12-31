@@ -5,11 +5,13 @@ import Footer from '../components/Footer'
 import { useNavigate } from 'react-router-dom'
 import { getAllMoviesAPI } from '../Services/allAPI'
 import { toast } from 'react-toastify'
+import { InfinitySpin } from 'react-loader-spinner'
 
 
 function AllMovies() {
     const [isMobile] = useState(window.innerWidth<1000?true:false)
     const [allMovies,setAllMovies]=useState([])
+    const [loading,setLoading]=useState(true)
 
     const navigate = useNavigate()
 
@@ -18,6 +20,7 @@ function AllMovies() {
             const result = await getAllMoviesAPI()
             if(result.status==200){
             setAllMovies(result.data)
+            setLoading(false)
             }else{
             toast.warn("Failed to fetch all movies")
             }
@@ -41,6 +44,8 @@ function AllMovies() {
         </div>
         <div className="row">
         {
+          loading?
+            <div className='d-flex justify-content-center align-items-center' style={{height:"50dvh"}}><InfinitySpin visible={true} width="200" color="#000000" ariaLabel="infinity-spin-loading"/></div>:
             allMovies.length>0?
             allMovies.map((item,index)=>(
               <div key={index} className="col d-flex flex-column border rounded-5 m-1 shadow" onClick={()=>navigate(`/movie/${item?._id}`)} style={{cursor:"pointer",minWidth:isMobile?"150px":"300px",maxWidth:isMobile?"":"400px"}}>

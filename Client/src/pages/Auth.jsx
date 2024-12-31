@@ -10,6 +10,7 @@ import { serverURL } from '../Services/serverURL'
 function Auth() {
   const [isMobile] = useState(window.innerWidth<1000?true:false)
   const[register,setRegister]=useState(true)
+  const[loading,setLoading]=useState(false)
   const[userData,setUserData]=useState({
     fullname:"",
     email:"",
@@ -28,6 +29,7 @@ function Auth() {
 
 
   const handleLogin =async () => {
+    setLoading(true)
     try{
       const {email,password} = userData
       if(!email || !password){
@@ -48,10 +50,12 @@ function Auth() {
     }catch(err){
       console.log(err);
     }
+    setLoading(false)
   }
 
 
   const handleRegister =async () => {
+    setLoading(true)
     try{
       const {email,password,fullname} = userData
       if(!email || !password || !fullname){
@@ -73,6 +77,7 @@ function Auth() {
     }catch(err){
       console.log(err);
     }
+    setLoading(false)
   }
   return (
     <div>
@@ -87,12 +92,12 @@ function Auth() {
                 <MDBInput label="Full Name"  type="text" size={isMobile?"sm":"md"} value={userData.fullname} onChange={(e)=>setUserData({...userData,fullname:e.target.value})}/>
                 <MDBInput label="Email"  type="email" size={isMobile?"sm":"md"} value={userData.email} onChange={(e)=>setUserData({...userData,email:e.target.value})}/>
                 <MDBInput label="Password"  type="password" size={isMobile?"sm":"md"} value={userData.password} onChange={(e)=>setUserData({...userData,password:e.target.value})}/>
-                <MDBBtn color='dark' size={isMobile?"sm":"md"} onClick={handleRegister}>Register</MDBBtn>
+                <MDBBtn color='dark' size={isMobile?"sm":"md"} onClick={handleRegister} disabled={loading}>Register</MDBBtn>
               </div>:
               <div className={`col-6 gap-1 text-light d-flex align-items-center justify-content-center flex-column ${isMobile?"":"gap-3"}`} style={{height:isMobile?"35vh":"45vh"}}>
                 <h1 className='p-0 m-0'>Welcome</h1>
                 <p className='p-0 m-0 text-center'>Don't have an account?</p>
-                <MDBBtn color='light' onClick={()=>setRegister(false)} size={isMobile?"sm":"md"}>Register here</MDBBtn>
+                <MDBBtn color='light' onClick={()=>setRegister(false)} size={isMobile?"sm":"md"} disabled={loading}>Register here</MDBBtn>
               </div>
             }
             {
@@ -100,13 +105,13 @@ function Auth() {
               <div className={`col-6 gap-1 text-light d-flex align-items-center justify-content-center flex-column ${isMobile?"":"gap-3"}`}>
                 <h1 className='p-0 m-0'>Welcome</h1>
                 <p className='p-0 m-0 text-center'>Have an account?</p>
-                <MDBBtn color='light' onClick={()=>setRegister(true)} size={isMobile?"sm":"md"}>Login here</MDBBtn>
+                <MDBBtn color='light' onClick={()=>setRegister(true)} size={isMobile?"sm":"md"} disabled={loading}>Login here</MDBBtn>
               </div>:
               <div className="col-6 py-5 px-4 gap-3 d-flex flex-column align-items-center justify-content-center">
                 <h2 className='fw-bolder'>Login</h2>
                 <MDBInput label="Email"  type="email" size={isMobile?"sm":"md"} value={userData.email} onChange={(e)=>setUserData({...userData,email:e.target.value})}/>
                 <MDBInput label="Password"  type="password" size={isMobile?"sm":"md"} value={userData.password} onChange={(e)=>setUserData({...userData,password:e.target.value})}/>
-                <MDBBtn color='dark' size={isMobile?"sm":"md"} onClick={handleLogin}>Login</MDBBtn>
+                <MDBBtn color='dark' size={isMobile?"sm":"md"} onClick={handleLogin} disabled={loading}>Login</MDBBtn>
               </div>
             }
           </div>

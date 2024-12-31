@@ -111,3 +111,8 @@ export const checkServerApi = async () => {
 export const getBookingsUserApi = async (reqHeader) => {
     return await commonAPI("GET",`${serverURL}/bookingUser`,"",reqHeader)
 }
+
+// get booking for user
+export const getBookingsAdminApi = async (reqHeader) => {
+    return await commonAPI("GET",`${serverURL}/bookingAdmin`,"",reqHeader)
+}

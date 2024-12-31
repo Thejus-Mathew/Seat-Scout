@@ -6,9 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getAMovieAPI, removeFromTheatreListAPI } from '../Services/allAPI'
 import { adminContext } from '../Context/Context'
 import AdminSeat from '../components/AdminSeat'
+import { InfinitySpin } from 'react-loader-spinner'
 
 
 function AdminMovie() {
+  const [loading,setLoading]=useState(true)
   const{admin,setAdmin}=useContext(adminContext)
     const {movieId} = useParams()
     const [movieIndex]=useState(admin.movies.findIndex((item)=>item.movieId==movieId))
@@ -69,23 +71,6 @@ function AdminMovie() {
 
     const [choseDate,setChoseDate]=useState(weekNum)
 
-
-
-    const[movie,setMovie]=useState({
-        name:"",
-        rating:"",
-        format:[],
-        languages:[],
-        duration:"",
-        type:[],
-        rated:"",
-        releaseDate:"",
-        about:"",
-        cast:[],
-        crew:[],
-        poster:"",
-        cover:"",
-      })
       const navigate = useNavigate()
 
 
@@ -126,8 +111,7 @@ function AdminMovie() {
             const result = await getAMovieAPI(movieId,reqHeader)
             if(result.status==200){
               setGotMovie(result.data)
-              const {name,rating,format,languages,duration,type,rated,releaseDate,about,cast,crew,poster,cover} = result.data
-              setMovie({name,rating,format,languages,duration,type,rated,releaseDate,about,cast,crew,poster,cover})
+              setLoading(false)
             }
           }catch(err){
             toast.warn(err)
@@ -206,6 +190,10 @@ function AdminMovie() {
   return (
     <div>
       <AdminHeader/>
+      {
+        loading?
+          <div className='d-flex justify-content-center align-items-center' style={{height:"50dvh"}}><InfinitySpin visible={true} width="200" color="#000000" ariaLabel="infinity-spin-loading"/></div>:
+          <>
       <div className="bgbg" style={{backgroundImage:`url(${gotMovie?.cover})`,height:`${isMobile?"200px":"500px"}`}}>
         <div className={`bg d-flex ${isMobile?"py-2":"p-5 py-4"}`}>
             <img src={gotMovie?.poster} className={`${isMobile?"ms-2":"ms-5 me-5"}`} alt="" />
@@ -373,6 +361,8 @@ function AdminMovie() {
           }
         </ul>
       </div>
+      </>
+      }
       <Footer/>
     </div>
   )

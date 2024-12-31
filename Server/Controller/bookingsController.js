@@ -27,9 +27,7 @@ exports.getBookings = async (req,res)=>{
 
 exports.getBookingsForUser = async (req,res)=>{
     try{
-        const userId = new mongoose.Types.ObjectId(req.payload)
-        console.log(userId);
-        
+        const userId = new mongoose.Types.ObjectId(req.payload)        
         const result = await bookings.aggregate([
             { "$match": { userId } },
             {"$lookup":{
@@ -43,6 +41,53 @@ exports.getBookingsForUser = async (req,res)=>{
                             "_id":0,
                             "theatreName":1,
                             "city":1,
+                        }
+                    }
+                ]
+            }},
+            {"$lookup":{
+                "from":"movies",
+                "localField":"movieId",
+                "foreignField":"_id",
+                "as":"movieId",
+                "pipeline":[
+                    {
+                        "$project":{
+                            "_id":0,
+                            "name":1,
+                            "poster":1,
+                            "cover":1,
+                            "releaseDate":1,
+                        }
+                    }
+                ]
+            }},
+        ])  
+        res.status(200).json(result)
+    }catch(err){
+        console.log(err);
+        
+        res.status(500).json(err)
+    }
+}
+
+exports.getBookingsForAdmin = async (req,res)=>{
+    try{
+        const adminId = new mongoose.Types.ObjectId(req.payload)
+
+        const result = await bookings.aggregate([
+            { "$match": { adminId } },
+            {"$lookup":{
+                "from":"users",
+                "localField":"userId",
+                "foreignField":"_id",
+                "as":"userId",
+                "pipeline":[
+                    {
+                        "$project":{
+                            "_id":0,
+                            "name":1,
+                            "email":1,
                         }
                     }
                 ]
